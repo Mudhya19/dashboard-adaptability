@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyGWalker App Preview</title>
+</head>
+<body>
+    <div id="pygwalker-app"></div>
+    <script type="module">
+        import PyGWalkerApp from './src/index';
+        window.addEventListener('message', function(event) {
+            if (event.data.type == "pyg_props") {
+                PyGWalkerApp.GWalker(event.data.data, "pygwalker-app");
+            }
+        }, false);
+    </script>
+</body>
+</html>

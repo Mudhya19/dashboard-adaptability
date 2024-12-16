@@ -1,0 +1,129 @@
+[project]
+name = "pygwalker"
+dynamic = ["version"]
+requires-python = ">=3.7"
+description = "pygwalker: turn your data into an interactive UI for data exploration and visualization"
+authors = [ { name = "kanaries", email = "support@kanaries.net" } ]
+license-files = { paths = ["LICENSE"] }
+readme = "README.md"
+keywords = [ 'visualization', 'pandas', 'data-analysis', 'tableau', 'data-exploration', 'dataframe', 'tableau-alternative', 'jupyter' ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "jinja2",
+    "ipython",
+    "astor",
+    "typing_extensions",
+    "ipywidgets",
+    "pydantic",
+    "psutil",
+    "duckdb>=0.10.1,<2.0.0",
+    "pyarrow",
+    "sqlglot>=23.15.8",
+    "requests",
+    "arrow",
+    "sqlalchemy",
+    "gw_dsl_parser==0.1.49.1",
+    "appdirs",
+    "segment-analytics-python==2.2.3",
+    "pandas",
+    "pytz",
+    "kanaries_track==0.0.5",
+    "cachetools",
+    "packaging",
+    "numpy<2.0.0",
+    "ipylab<=1.0.0",
+    "quickjs",
+    "traitlets",
+    "anywidget",
+]
+[project.urls]
+homepage = "https://kanaries.net/pygwalker"
+repository = "https://github.com/Kanaries/pygwalker"
+# changelog, documentation
+
+[project.optional-dependencies]
+pandas = ["pandas"]
+polars = ["polars"]
+streamlit = ["streamlit"]
+notebook = [
+    "jupyter-client<=7.4.9,>6.0.0",
+    "jupyter-server<=2.5.0",
+    "ipywidgets<8.0.0,>7.0.0"
+]
+snowflake = [
+    "pandas",
+    "SQLAlchemy==1.4.49",
+    "snowflake-sqlalchemy==1.5.0",
+    "pyarrow==10.0.1"
+]
+labv4 = [
+    "jupyter-client>7.4.9",
+    "jupyter-server>2.5.0",
+    "ipywidgets>=8.0.0"
+]
+all = [
+    "pygwalker[pandas,polars,streamlit]",
+]
+dev = [
+    "build",
+    "twine",
+    "jupyterlab",
+    "jupyter_server_proxy",
+]
+
+[project.scripts]
+pygwalker = "bin.pygwalker_command:main"
+
+[tool.hatch]
+# metadata = { allow-direct-references = true }
+version = { path = "pygwalker/__init__.py" }
+
+[tool.hatch.build]
+include = [
+    "pygwalker",
+    "pygwalker_tools",
+    "bin",
+    "pygwalker/templates/**",
+    "pygwalker/templates/**/*",
+]
+exclude = [ "/graphic-walker", "/tests" ]
+artifacts = [ "pygwalker/templates/*" ]
+
+[tool.hatch.build.hooks.jupyter-builder]
+dependencies = ["hatch-jupyter-builder"]
+build-function = "hatch_jupyter_builder.npm_builder"
+ensured-targets = ["pygwalker/templates/dist/pygwalker-app.iife.js"]
+skip-if-exists = ["pygwalker/templates/dist/pygwalker-app.iife.js"]
+# install-pre-commit-hook = true
+optional-editable-build = true
+
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+path = "app"
+build_dir = "./build"
+build_cmd = "build"
+
+[tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
+path = "app"
+build_dir = "./build"
+build_cmd = "dev"
+
+
+[tool.hatch.build.targets.wheel]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "README.md", "LICENSE",
+    "app",
+    "pygwalker",
+    "pygwalker_tools",
+    "bin",
+    "pygwalker/templates/**",
+    "pygwalker/templates/**/*",
+    "scripts",
+]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
